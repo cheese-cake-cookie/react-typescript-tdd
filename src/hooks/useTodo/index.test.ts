@@ -21,13 +21,25 @@ const TEMP_TODOS: Todo[] = [
     title: "hello",
     state: "BACKLOG",
   },
-  {
-    id: 4,
-    title: "hello",
-    state: "BACKLOG",
-  },
 ];
 
 const mock = new MockAdapter(axios);
 
-describe("TODO APP", () => {});
+describe("TODO APP", () => {
+  test('add todo', async () => {
+    // parameter of onGet method is actual API URL but response value is mocked data.
+    mock.onGet('/json/todo.json').reply(200, { data: TEMP_TODOS });
+
+    // simulate rendering by @testing-library/react-hooks
+    const { result, rerender, waitForNextUpdate } = renderHook(() => useTodo());
+
+    // wait for until finish useEffect hook
+    await waitForNextUpdate();
+
+    act(() => result.current.addTodo(TEMP_TODOS[0].title));
+    expect(result.current.todos.length).toBe(4);
+
+    act(() => result.current.addTodo(TEMP_TODOS[1].title));
+    expect(result.current.todos.length).toBe(5);
+  })
+});
