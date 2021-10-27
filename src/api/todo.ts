@@ -8,7 +8,7 @@ export interface Todo {
 }
 
 const getTodos = async (): Promise<Todo[]> => {
-  const { data }: { data: { data: Todo[], totalCount?: number } } = await axios.get('/json/todo.json');
+  const { data }: { data: { data: Todo[], totalCount?: number } } = await axios.get('/json/todos.json');
   
   return data.data;
 }
